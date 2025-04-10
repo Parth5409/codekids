@@ -27,14 +27,9 @@
 @layer base {
   body {
     @apply antialiased transition-colors duration-200;
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-family: "Nunito", sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-  }
-  @media (max-width: 768px) {
-    body {
-      font-family: "Nunito", sans-serif;
-    }
   }
 }
 
