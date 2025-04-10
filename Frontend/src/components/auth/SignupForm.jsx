@@ -41,7 +41,6 @@ const SignupForm = () => {
     if (validateForm()) {
       setIsSubmitting(true);
       try {
-        // Here you would typically make an API call to register
         await login({ username: formData.username, password: formData.password });
         navigate('/dashboard');
       } catch (error) {
@@ -63,23 +62,23 @@ const SignupForm = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md p-6 bg-white rounded-2xl shadow-xl"
+      className="w-full max-w-[340px] sm:max-w-md p-4 sm:p-6 bg-white rounded-xl sm:rounded-2xl shadow-xl mx-2"
     >
-      <div className="flex justify-center mb-6">
-        <RobotMascot size={120} />
+      <div className="flex justify-center mb-4 sm:mb-6">
+        <RobotMascot size={100} className="sm:scale-110 md:scale-120" />
       </div>
 
-      <h2 className="text-2xl font-bold text-center text-primary mb-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-center text-primary mb-4 sm:mb-6">
         Join the Coding Adventure!
       </h2>
 
       {errors.submit && (
-        <Alert severity="error" className="mb-4">
+        <Alert severity="error" className="mb-3 sm:mb-4 text-sm sm:text-base">
           {errors.submit}
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <TextField
           fullWidth
           label="Choose a Cool Username"
@@ -90,6 +89,15 @@ const SignupForm = () => {
           helperText={errors.username}
           disabled={isSubmitting}
           className="bg-gray-50"
+          size="small"
+          sx={{ 
+            '& .MuiInputLabel-root': {
+              fontSize: { xs: '0.875rem', sm: '1rem' }
+            },
+            '& .MuiInputBase-root': {
+              fontSize: { xs: '0.875rem', sm: '1rem' }
+            }
+          }}
           inputProps={{
             'aria-label': 'Username',
             autoComplete: 'username'
@@ -108,13 +116,22 @@ const SignupForm = () => {
             helperText={errors.password}
             disabled={isSubmitting}
             className="bg-gray-50"
+            size="small"
+            sx={{ 
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              },
+              '& .MuiInputBase-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              }
+            }}
             InputProps={{
               endAdornment: (
                 <IconButton
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword(!showPassword)}
                   edge="end"
-                  size="large"
+                  size="small"
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -135,13 +152,22 @@ const SignupForm = () => {
             helperText={errors.confirmPassword}
             disabled={isSubmitting}
             className="bg-gray-50"
+            size="small"
+            sx={{ 
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              },
+              '& .MuiInputBase-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              }
+            }}
             InputProps={{
               endAdornment: (
                 <IconButton
                   aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   edge="end"
-                  size="large"
+                  size="small"
                 >
                   {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -161,7 +187,7 @@ const SignupForm = () => {
             disabled={isSubmitting}
             className={`
               bg-primary hover:bg-primary-dark text-white 
-              py-3 rounded-full transition-all duration-300
+              py-2.5 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base
               ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}
             `}
           >
@@ -174,7 +200,7 @@ const SignupForm = () => {
             type="button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="text-primary hover:text-primary-dark text-sm font-medium"
+            className="text-primary hover:text-primary-dark text-xs sm:text-sm font-medium"
             onClick={() => navigate('/auth/login')}
           >
             Already have an account? Login here!

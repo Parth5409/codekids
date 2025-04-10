@@ -14,7 +14,7 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6">
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="login" element={<LoginForm />} />

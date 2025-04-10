@@ -1,16 +1,16 @@
 import { motion } from 'framer-motion';
 
-const RobotMascot = ({ size = 200, color = '#FF4949', className = '' }) => { // Changed default color
+const RobotMascot = ({ size = 200, color = '#FF4949', className = '', customAnimation }) => { // Changed default color
     return (
         <motion.div
             className={`relative ${className}`}
             style={{ 
                 width: size, 
                 height: size,
-                filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.5))', // Added glow effect
+                filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.5))',
             }}
-            animate={{ y: [0, -10, 0] }}
-            transition={{
+            animate={customAnimation || { y: [0, -10, 0] }}
+            transition={!customAnimation && {
                 repeat: Infinity,
                 duration: 3,
                 ease: "easeInOut"

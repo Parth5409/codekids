@@ -37,7 +37,7 @@ const LoginForm = () => {
       setIsSubmitting(true);
       try {
         await login(formData);
-        navigate('/dashboard'); // Redirect to dashboard after successful login
+        navigate('/dashboard');
       } catch (error) {
         setErrors({ submit: error.message || 'Login failed. Please try again.' });
       } finally {
@@ -61,23 +61,23 @@ const LoginForm = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md p-6 bg-white rounded-2xl shadow-xl"
+      className="w-full max-w-[340px] sm:max-w-md p-4 sm:p-6 bg-white rounded-xl sm:rounded-2xl shadow-xl mx-2"
     >
-      <div className="flex justify-center mb-6">
-        <RobotMascot size={120} />
+      <div className="flex justify-center mb-4 sm:mb-6">
+        <RobotMascot size={100} className="sm:scale-110 md:scale-120" />
       </div>
       
-      <h2 className="text-2xl font-bold text-center text-primary mb-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-center text-primary mb-4 sm:mb-6">
         Welcome Back, Explorer!
       </h2>
 
       {errors.submit && (
-        <Alert severity="error" className="mb-4">
+        <Alert severity="error" className="mb-3 sm:mb-4 text-sm sm:text-base">
           {errors.submit}
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <TextField
           fullWidth
           label="Username"
@@ -88,13 +88,22 @@ const LoginForm = () => {
           helperText={errors.username}
           disabled={isSubmitting}
           className="bg-gray-50"
+          size="small"
+          sx={{ 
+            '& .MuiInputLabel-root': {
+              fontSize: { xs: '0.875rem', sm: '1rem' }
+            },
+            '& .MuiInputBase-root': {
+              fontSize: { xs: '0.875rem', sm: '1rem' }
+            }
+          }}
           inputProps={{
             'aria-label': 'Username',
             autoComplete: 'username'
           }}
         />
 
-<div className="relative">
+        <div className="relative">
           <TextField
             fullWidth
             label="Password"
@@ -106,13 +115,22 @@ const LoginForm = () => {
             helperText={errors.password}
             disabled={isSubmitting}
             className="bg-gray-50"
+            size="small"
+            sx={{ 
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              },
+              '& .MuiInputBase-root': {
+                fontSize: { xs: '0.875rem', sm: '1rem' }
+              }
+            }}
             InputProps={{
               endAdornment: (
                 <IconButton
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword(!showPassword)}
                   edge="end"
-                  size="large"
+                  size="small"
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -132,7 +150,7 @@ const LoginForm = () => {
             disabled={isSubmitting}
             className={`
               bg-primary hover:bg-primary-dark text-white 
-              py-3 rounded-full transition-all duration-300
+              py-2.5 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base
               ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}
             `}
           >
@@ -140,7 +158,7 @@ const LoginForm = () => {
           </Button>
         </motion.div>
 
-        <div className="flex justify-between items-center mt-4 text-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 mt-4 text-xs sm:text-sm">
           <motion.button
             type="button"
             whileHover={{ scale: 1.05 }}
