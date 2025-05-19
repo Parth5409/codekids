@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --accent-primary: #FF4949;
+  --accent-secondary: #45B7AE;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #FF6B6B;
+  --accent-secondary: #66D9E8;
+  --card-bg: #2d2d2d;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+}
+
+@layer base {
+  body {
+    @apply antialiased transition-colors duration-200;
+    font-family: "Nunito", sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 text-white transition-all duration-300 rounded-full;
+    background-color: var(--accent-primary);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 text-white transition-all duration-300 rounded-full;
+    background-color: var(--accent-secondary);
+  }
+
+  .card {
+    @apply p-6 transition-all duration-300 rounded-2xl;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 6px var(--card-shadow);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .dark-transition {
+    @apply transition-colors duration-200;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}

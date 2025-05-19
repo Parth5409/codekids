@@ -1,0 +1,54 @@
+# === BACKEND (Spring Boot) ===
+/Backend/target/
+!/Backend/.mvn/wrapper/maven-wrapper.jar
+!/Backend/src/main/**/target/
+!/Backend/src/test/**/target/
+# IntelliJ IDEA
+/Backend/.idea/
+/Backend/*.iml
+/Backend/*.iws
+/Backend/.classpath
+/Backend/.project
+/Backend/.settings/
+# NetBeans
+/Backend/nbproject/private/
+/Backend/nbbuild/
+/Backend/dist/
+/Backend/nbdist/
+/Backend/.nb-gradle/
+# VS Code
+/Backend/.vscode/
+# Build
+/Backend/build/
+!/Backend/src/main/**/build/
+!/Backend/src/test/**/build/
+# Logs
+/Backend/logs/
+*.log
+
+# === FRONTEND (React/Vite) ===
+/Frontend/node_modules/
+/Frontend/dist/
+/Frontend/build/
+# OS files
+/Frontend/.DS_Store
+/Frontend/Thumbs.db
+# VS Code
+/Frontend/.vscode/
+# Logs
+/Frontend/npm-debug.log*
+/Frontend/yarn-debug.log*
+/Frontend/yarn-error.log*
+/Frontend/pnpm-debug.log*
+# Env files
+/Frontend/.env
+/Frontend/.env.local
+/Frontend/.env.development.local
+/Frontend/.env.test.local
+/Frontend/.env.production.local
+
+# === GENERAL ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
