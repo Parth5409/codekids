@@ -4,6 +4,12 @@
 
 ---
 
+## Live Demo
+
+- **Deployed App:** [https://codekids-kappa.vercel.app/](https://codekids-kappa.vercel.app/)
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
@@ -15,7 +21,6 @@
 - [Environment Variables](#environment-variables)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
