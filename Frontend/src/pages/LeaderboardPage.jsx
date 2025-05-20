@@ -36,7 +36,7 @@ const LeaderboardPage = () => {
   const fetchLeaderboardData = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:8080/api/leaderboard?page=${currentPage}&size=10${selectedCountry ? `&country=${selectedCountry}` : ''}`;
+      const url = `${import.meta.env.VITE_API_URL}/api/leaderboard?page=${currentPage}&size=10${selectedCountry ? `&country=${selectedCountry}` : ''}`;
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -53,7 +53,7 @@ const LeaderboardPage = () => {
 
   const fetchUserBadges = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/badges/user/${user.id}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/badges/user/${user.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUserBadges(response.data);

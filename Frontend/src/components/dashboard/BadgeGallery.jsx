@@ -17,10 +17,10 @@ const BadgeGallery = () => {
       
       try {
         const [badgesResponse, userBadgesResponse] = await Promise.all([
-          axios.get('http://localhost:8080/api/badges', {
+          axios.get(`${import.meta.env.VITE_API_URL}/api/badges`, {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          axios.get(`http://localhost:8080/api/badges/user/${user.id}`, {
+          axios.get(`${import.meta.env.VITE_API_URL}/api/badges/user/${user.id}`, {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);

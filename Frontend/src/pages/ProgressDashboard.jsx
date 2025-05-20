@@ -41,13 +41,13 @@ const ProgressDashboard = () => {
   const fetchUserProgress = async () => {
     try {
       const [rankResponse, challengesResponse, badgesResponse] = await Promise.all([
-        axios.get(`http://localhost:8080/api/leaderboard/user/${user.id}/rank`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/leaderboard/user/${user.id}/rank`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get(`http://localhost:8080/api/users/${user.id}/challenges`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.id}/challenges`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get(`http://localhost:8080/api/users/${user.id}/badges`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.id}/badges`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -70,10 +70,10 @@ const ProgressDashboard = () => {
   const fetchRecentActivities = async () => {
     try {
       const [challengesResponse, badgesResponse] = await Promise.all([
-        axios.get(`http://localhost:8080/api/users/${user.id}/challenges`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.id}/challenges`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get(`http://localhost:8080/api/users/${user.id}/badges`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user.id}/badges`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
