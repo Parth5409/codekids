@@ -20,7 +20,6 @@ export const AppProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, credentials);
-      console.log('Login response:', response.data);
       
       const { token, id, username, email, avatar, points, country, role } = response.data;
       

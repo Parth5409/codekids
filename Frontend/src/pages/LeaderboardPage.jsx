@@ -81,6 +81,21 @@ const LeaderboardPage = () => {
     );
   }
 
+  // After fetching leaderboardData, if it's empty, show current user with default values
+  const displayLeaderboardData = leaderboardData.length > 0
+    ? leaderboardData
+    : user
+      ? [{
+          userId: user.id,
+          username: user.username,
+          avatar: user.avatar,
+          points: user.points || 0,
+          completedChallenges: 0,
+          earnedBadges: 0,
+          rank: 1
+        }]
+      : [];
+
   return (
     <div className="min-h-screen bg-gray-50 py-4 sm:py-8 px-2 sm:px-4">
       <div className="max-w-4xl mx-auto">
@@ -125,7 +140,7 @@ const LeaderboardPage = () => {
           </div>
 
           <div className="space-y-3 sm:space-y-4">
-            {leaderboardData.map((entry, index) => (
+            {displayLeaderboardData.map((entry, index) => (
               <motion.div
                 key={entry.userId}
                 initial={{ opacity: 0, x: -20 }}
