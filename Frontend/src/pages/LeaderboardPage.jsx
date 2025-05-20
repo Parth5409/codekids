@@ -35,7 +35,7 @@ const LeaderboardPage = () => {
 
   const fetchLeaderboardData = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const url = `${import.meta.env.VITE_API_URL}/api/leaderboard?page=${currentPage}&size=10${selectedCountry ? `&country=${selectedCountry}` : ''}`;
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
