@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, credentials);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, credentials);
       console.log('Login response:', response.data);
       
       const { token, id, username, email, avatar, points, country, role } = response.data;
@@ -50,7 +50,7 @@ export const AppProvider = ({ children }) => {
 
   const signup = async (formData) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
