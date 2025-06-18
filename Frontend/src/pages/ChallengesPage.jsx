@@ -76,7 +76,7 @@ const ChallengesPage = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch('/api/challenges', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -136,7 +136,7 @@ const ChallengesPage = () => {
       return;
     }
     try {
-      const response = await fetch(`/api/challenges/${challengeId}/start`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges/${challengeId}/start`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -159,7 +159,7 @@ const ChallengesPage = () => {
       throw new Error("Authentication token not found."); // Throw error to indicate submission failure
     }
     try {
-      const response = await fetch(`/api/challenges/${challengeId}/submit`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges/${challengeId}/submit`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
