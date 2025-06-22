@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
+import { 
   DndContext, 
   useDraggable, 
   useDroppable,
   TouchSensor,
   MouseSensor,
   useSensor,
-  useSensors
+  useSensors 
 } from '@dnd-kit/core';
 import { Code, Lightbulb, ArrowForward, Refresh, EmojiEvents, Star } from '@mui/icons-material';
 import ReactConfetti from 'react-confetti';
@@ -28,17 +28,13 @@ const DroppableArea = ({ children }) => {
 };
 
 const ChallengesPage = () => {
-  const { progress, updateProgress, token } = useApp(); // Assuming token is available in useApp()
+  const { progress, updateProgress } = useApp();
   const [showHint, setShowHint] = useState(false);
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [droppedBlocks, setDroppedBlocks] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [shake, setShake] = useState(false);
-  const [backendChallenges, setBackendChallenges] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [processedChallenges, setProcessedChallenges] = useState([]);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -71,139 +67,57 @@ const ChallengesPage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const fetchChallenges = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-        }
-        const data = await response.json();
-        // Assuming Spring Page structure, challenges are in 'content'
-        setBackendChallenges(data.content || []);
-        console.log('Fetched challenges:', data.content);
-      } catch (err) {
-        setError(err.message);
-        console.error('Failed to fetch challenges:', err);
-        setBackendChallenges([]); // Set to empty array on error
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchChallenges();
-  }, []);
-
-  useEffect(() => {
-    if (backendChallenges && backendChallenges.length > 0) {
-      const newProcessedChallenges = backendChallenges.map(challenge => {
-        try {
-          const blocks = JSON.parse(challenge.codeBlocks || '[]');
-          const solution = JSON.parse(challenge.solutionLogic || '[]');
-          const hint = challenge.hint || challenge.description || "Try your best!";
-          return {
-            ...challenge, // keep other fields like id, title, description
-            blocks,
-            solution,
-            hint
-          };
-        } catch (e) {
-          console.error("Failed to parse challenge data:", challenge, e);
-          return null;
-        }
-      }).filter(Boolean);
-      setProcessedChallenges(newProcessedChallenges);
-      if (currentChallenge >= newProcessedChallenges.length && newProcessedChallenges.length > 0) {
-        setCurrentChallenge(0);
-      } else if (newProcessedChallenges.length === 0) {
-        setCurrentChallenge(0);
-      }
-    } else {
-      setProcessedChallenges([]);
-      setCurrentChallenge(0);
+  const challenges = [
+    {
+      id: 1,
+      title: 'Print Hello World',
+      description: 'Create your first program by arranging the blocks to print "Hello World"',
+      hint: 'Start with the print statement block and add the text inside!',
+      blocks: [
+        { id: 'print', content: 'print', type: 'action' },
+        { id: 'hello', content: '"Hello World"', type: 'variable' }
+      ],
+      solution: ['print', 'hello']
+    },
+    {
+      id: 2,
+      title: 'Simple Loop',
+      description: 'Create a loop that prints numbers from 1 to 3',
+      hint: 'Use the for loop block and arrange the numbers correctly!',
+      blocks: [
+        { id: 'print', content: 'print', type: 'action' },
+        { id: 'for', content: 'for i in range(3):', type: 'control' },
+        { id: 'i', content: 'i', type: 'variable' }
+      ],
+      solution: ['for', 'print', 'i']
+    },
+    {
+      id: 3,
+      title: 'If Statement',
+      description: 'Create an if statement to check if a number is positive',
+      hint: 'Use the if condition block with the comparison operator!',
+      blocks: [
+        { id: 'print', content: 'print', type: 'action' },
+        { id: 'if', content: 'if x > 0:', type: 'control' },
+        { id: 'message', content: '"Positive number"', type: 'variable' }
+      ],
+      solution: ['if', 'print', 'message']
     }
-  }, [backendChallenges]); // currentChallenge is not needed here as it's reset based on newProcessedChallenges
+  ];
 
-  const handleStartChallenge = async (challengeId) => {
-    if (!token) {
-      console.warn("No auth token available, cannot start challenge.");
-      return;
-    }
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges/${challengeId}/start`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-      }
-      const data = await response.json();
-      console.log('Challenge started:', data);
-    } catch (error) {
-      console.error('Failed to start challenge:', error);
-    }
-  };
-
-  const handleSubmitChallenge = async (challengeId, solutionAttempt) => {
-    if (!token) {
-      console.warn("No auth token available, cannot submit challenge.");
-      throw new Error("Authentication token not found."); // Throw error to indicate submission failure
-    }
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/challenges/${challengeId}/submit`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(solutionAttempt)
-      });
-      if (!response.ok) {
-        const errorData = await response.text(); // Try to get more error info
-        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText} - ${errorData}`);
-      }
-      const data = await response.json();
-      console.log('Challenge submitted successfully:', data);
-      return data; // Return data for potential further use
-    } catch (error) {
-      console.error('Failed to submit challenge:', error);
-      throw error; // Re-throw to be caught by caller
-    }
-  };
-
-  useEffect(() => {
-    if (processedChallenges.length > 0 && processedChallenges[currentChallenge] && token) {
-      const challengeId = processedChallenges[currentChallenge].id;
-      handleStartChallenge(challengeId);
-    }
-    // Ensure droppedBlocks are reset when currentChallenge changes
-    setDroppedBlocks([]);
-  }, [currentChallenge, processedChallenges, token]);
-
-
-  const handleDragEnd = async (event) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    if (over && over.id === 'dropzone' && processedChallenges.length > 0 && processedChallenges[currentChallenge]) {
-      const currentChallengeData = processedChallenges[currentChallenge];
-      const draggedBlock = currentChallengeData.blocks.find(
+    if (over && over.id === 'dropzone') {
+      const draggedBlock = challenges[currentChallenge].blocks.find(
         (block) => block.id === active.id
       );
 
       if (draggedBlock && !droppedBlocks.find(block => block.id === draggedBlock.id)) {
-        const newDroppedBlocks = [...droppedBlocks, draggedBlock];
-        setDroppedBlocks(newDroppedBlocks); // Update droppedBlocks immediately for UI responsiveness
+        setDroppedBlocks((prev) => [...prev, draggedBlock]);
 
-        const solution = currentChallengeData.solution;
+        const newDroppedBlocks = [...droppedBlocks, draggedBlock];
+        const solution = challenges[currentChallenge].solution;
 
         if (newDroppedBlocks.length === solution.length) {
           const isCorrect = newDroppedBlocks.every(
@@ -211,46 +125,22 @@ const ChallengesPage = () => {
           );
 
           if (isCorrect) {
-            if (token) {
-              try {
-                await handleSubmitChallenge(currentChallengeData.id, newDroppedBlocks);
-                // Proceed with success UI only if submission is successful
-                updateProgress(currentChallengeData.id); // Use ID for progress
-                setShowSuccessPopup(true);
-                setShowConfetti(true);
-                setTimeout(() => {
-                  setShowConfetti(false);
-                  setShowSuccessPopup(false);
-                  if (currentChallenge < processedChallenges.length - 1) {
-                    setCurrentChallenge(prev => prev + 1);
-                    // setDroppedBlocks([]); // Already handled by useEffect for currentChallenge change
-                  }
-                }, 4000);
-              } catch (error) {
-                console.error("Challenge submission failed, not proceeding with success UI.", error);
-                // Optionally: set an error state here to show a message to the user
-                // For now, we just log it and prevent the success UI.
-                // Shake animation for incorrect attempt might be better here or a specific error message.
-                setShake(true);
-                setTimeout(() => {
-                  setShake(false);
-                  // Do not clear droppedBlocks here, let user see their attempt
-                }, 820);
-                return; // Stop further execution in isCorrect block
+            setShowSuccessPopup(true);
+            setShowConfetti(true);
+            updateProgress(currentChallenge);
+            setTimeout(() => {
+              setShowConfetti(false);
+              setShowSuccessPopup(false);
+              if (currentChallenge < challenges.length - 1) {
+                setCurrentChallenge(prev => prev + 1);
+                setDroppedBlocks([]);
               }
-            } else {
-              console.warn("No auth token available, cannot submit challenge.");
-              // Handle case where token is missing but solution is correct locally
-              // Might show a message to the user to log in
-              setShake(true); // Indicate something is off
-              setTimeout(() => setShake(false), 820);
-              return;
-            }
+            }, 4000);
           } else {
             setShake(true);
             setTimeout(() => {
               setShake(false);
-              setDroppedBlocks([]); // Clear blocks on incorrect attempt
+              setDroppedBlocks([]);
             }, 820);
           }
         }
@@ -263,23 +153,11 @@ const ChallengesPage = () => {
   };
 
   const handleNextChallenge = () => {
-    if (currentChallenge < processedChallenges.length - 1) {
+    if (currentChallenge < challenges.length - 1) {
       setCurrentChallenge(prev => prev + 1);
-      // setDroppedBlocks([]); // Already handled by useEffect for currentChallenge change
+      setDroppedBlocks([]);
     }
   };
-
-  if (isLoading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading challenges...</div>;
-  }
-
-  if (error) {
-    return <div className="flex justify-center items-center min-h-screen text-red-500">Error: {error}</div>;
-  }
-
-  if (processedChallenges.length === 0) {
-    return <div className="flex justify-center items-center min-h-screen">No challenges available.</div>;
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 sm:py-8 px-2 sm:px-4">
@@ -401,7 +279,7 @@ const ChallengesPage = () => {
                 Challenge {currentChallenge + 1}
               </h1>
               <span className="text-sm sm:text-base text-gray-400">
-                {currentChallenge + 1} of {processedChallenges.length}
+                {currentChallenge + 1} of {challenges.length}
               </span>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -428,10 +306,10 @@ const ChallengesPage = () => {
 
           <div className="mb-6 sm:mb-8">
             <h2 className="text-lg sm:text-xl font-semibold mb-2">
-              {processedChallenges[currentChallenge].title}
+              {challenges[currentChallenge].title}
             </h2>
             <p className="text-sm sm:text-base text-gray-600">
-              {processedChallenges[currentChallenge].description}
+              {challenges[currentChallenge].description}
             </p>
           </div>
 
@@ -444,7 +322,7 @@ const ChallengesPage = () => {
                   <span className="text-xs text-gray-500 ml-2">(Press and hold to drag on mobile)</span>
                 </h3>
                 <div className="flex gap-2 sm:gap-4 flex-wrap">
-                  {processedChallenges[currentChallenge].blocks
+                  {challenges[currentChallenge].blocks
                     .filter((block) => !droppedBlocks.find((d) => d.id === block.id))
                     .map((block) => (
                       <CodeBlock
@@ -492,7 +370,7 @@ const ChallengesPage = () => {
             </div>
           </DndContext>
 
-          {currentChallenge < processedChallenges.length - 1 && (
+          {currentChallenge < challenges.length - 1 && (
             <div className="mt-4 sm:mt-6 flex justify-end">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -511,7 +389,7 @@ const ChallengesPage = () => {
       <HintModal
         isOpen={showHint}
         onClose={() => setShowHint(false)}
-        hint={processedChallenges[currentChallenge].hint}
+        hint={challenges[currentChallenge].hint}
       />
     </div>
   );
